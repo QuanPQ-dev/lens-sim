@@ -97,16 +97,19 @@ button:hover {
 
 /* 🎄 KHUNG NOEL CHO CANVAS 🎄 */
 #canvas {
-    flex:1;
-    width:100%;
-    display:block;
-    background: linear-gradient(#fff,#f3f6ff);
+    flex: 1;
+    width: 100%;
+    display: block;
 
-    border: 25px solid transparent; 
-    border-radius: 20px;
+    /* Nền giữ nguyên */
+    background: linear-gradient(#fff, #f3f6ff);
 
-    /* Hình khung Noel (PNG bo viền) — không phá canvas */
-    border-image: url("https://i.imgur.com/JkYJEsj.png") 30 round;
+    /* Viền đỏ Noel */
+    border: 12px solid #c62828;
+    border-radius: 14px;
+
+    /* Tăng độ nổi */
+    box-shadow: 0 0 15px rgba(198, 40, 40, 0.4);
 }
 
 /* ============================
