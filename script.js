@@ -1,5 +1,5 @@
 // script.js - Mô phỏng thấu kính (giữ nguyên logic)
-// + Thêm hiệu ứng GIÁNG SINH: Tuyết rơi & glow Noel quanh canvas
+// + Thêm hiệu ứng GIÁNG SINH
 
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -18,7 +18,7 @@ const scaleVal = document.getElementById("scaleVal");
 let SCALE = 5;
 scaleVal.textContent = SCALE;
 
-// resize canvas to container
+// resize canvas
 function resize() {
   canvas.width = canvas.clientWidth;
   canvas.height = canvas.clientHeight;
@@ -69,11 +69,12 @@ function draw() {
   ctx.lineTo(canvas.width, centerY);
   ctx.stroke();
 
+  // Δ reference mark
   ctx.fillStyle = "#000";
-  ctx.font = "18px Mountains of Christmas";
+  ctx.font = "20px Mountains of Christmas";
   ctx.fillText("Δ", centerX - 500, centerY - 10);
 
-  // lens line
+  // lens
   const lensHalfH = Math.min(canvas.height * 0.45, 260);
   ctx.strokeStyle = "#29b6f6";
   ctx.lineWidth = 4;
@@ -83,7 +84,6 @@ function draw() {
   ctx.stroke();
 
   ctx.fillStyle = "#29b6f6";
-
   ctx.beginPath();
   ctx.moveTo(centerX, centerY - lensHalfH);
   ctx.lineTo(centerX - 10, centerY - lensHalfH + 20);
@@ -98,12 +98,6 @@ function draw() {
 
   // focal points
   const f_px = Math.abs(f) * SCALE;
-
-  ctx.fillStyle = "#000";
-  ctx.font = "20px Mountains of Christmas";
-  ctx.fillText("F", centerX - f_px - 8, centerY - 10);
-  ctx.fillText("F'", centerX + f_px - 6, centerY - 10);
-  ctx.fillText("O", centerX + 6, centerY + 16);
 
   dot(centerX - f_px, centerY);
   dot(centerX + f_px, centerY);
@@ -131,7 +125,6 @@ function draw() {
   const imageX = centerX + (isFinite(di_cm) ? di_cm * SCALE : canvas.width);
   const hi_cm = isFinite(di_cm) ? (-di_cm / do_cm) * h_cm : 0;
   const imageTopY = centerY - hi_cm * SCALE;
-
   const isReal = isFinite(di_cm) && di_cm > 0;
 
   ctx.lineWidth = 3;
@@ -143,8 +136,8 @@ function draw() {
   ctx.stroke();
   ctx.setLineDash([]);
 
-  ctx.beginPath();
   ctx.fillStyle = "#d32f2f";
+  ctx.beginPath();
   if (imageTopY < centerY) {
     ctx.moveTo(imageX - 6, imageTopY + 10);
     ctx.lineTo(imageX, imageTopY);
@@ -156,8 +149,7 @@ function draw() {
   }
   ctx.fill();
 
-  // RAYS ------------------------------------------------
-
+  // RAYS
   const objTop = { x: objX, y: objTopY };
   const lensX = centerX;
   const hitPoint = { x: lensX, y: objTopY };
@@ -252,16 +244,24 @@ function draw() {
     ctx.setLineDash([]);
   }
 
-  // labels
+  /* =====================================================
+     LABELS — VẼ SAU CÙNG ĐỂ ĐÈ LÊN TIA SÁNG
+  ===================================================== */
+
   ctx.fillStyle = "#000";
-  ctx.font = "18px Mountains of Christmas";
+  ctx.font = "20px Mountains of Christmas";
+
   ctx.fillText("A", objX - 14, centerY + 16);
   ctx.fillText("B", objX - 14, objTopY - 6);
   ctx.fillText("A'", imageX + 6, centerY + 16);
   ctx.fillText("B'", imageX + 6, imageTopY - 6);
+
+  ctx.fillText("F", centerX - f_px - 8, centerY - 10);
+  ctx.fillText("F'", centerX + f_px - 6, centerY - 10);
+  ctx.fillText("O", centerX + 8, centerY + 18);
 }
 
-// smooth draw
+// smoothed draw
 function scheduleDraw() {
   if (window._drawID) cancelAnimationFrame(window._drawID);
   window._drawID = requestAnimationFrame(draw);
@@ -282,9 +282,8 @@ setTimeout(() => {
   scheduleDraw();
 }, 50);
 
-
 /* ======================================================
-   ❄❄❄  HIỆU ỨNG GIÁNG SINH — TUYẾT RƠI TOÀN TRANG  ❄❄❄
+   ❄ TUYẾT RƠI
 ====================================================== */
 
 let snowContainer = document.createElement("div");
