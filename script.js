@@ -44,6 +44,33 @@ function dot(x, y, color = "#000") {
   ctx.arc(x, y, 4, 0, Math.PI * 2);
   ctx.fill();
 }
+function drawArrow(x1, y1, x2, y2, color = "#ffffff") {
+    const headlen = 12;
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+
+    ctx.strokeStyle = color;
+    ctx.fillStyle = color;
+    ctx.lineWidth = 2;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(x2, y2);
+    ctx.lineTo(
+        x2 - headlen * Math.cos(angle - Math.PI / 6),
+        y2 - headlen * Math.sin(angle - Math.PI / 6)
+    );
+    ctx.lineTo(
+        x2 - headlen * Math.cos(angle + Math.PI / 6),
+        y2 - headlen * Math.sin(angle + Math.PI / 6)
+    );
+    ctx.lineTo(x2, y2);
+    ctx.fill();
+}
+
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -75,26 +102,55 @@ function draw() {
   ctx.fillText("Δ", centerX - 500, centerY - 10);
 
   // lens
-  const lensHalfH = Math.min(canvas.height * 0.45, 260);
-  ctx.strokeStyle = "#29b6f6";
-  ctx.lineWidth = 4;
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY - lensHalfH);
-  ctx.lineTo(centerX, centerY + lensHalfH);
-  ctx.stroke();
+  // ======== LENS WITH CORRECT ARROW DIRECTIONS ========
+const lensHalfH = Math.min(canvas.height * 0.45, 260);
+ctx.strokeStyle = "#29b6f6";
+ctx.lineWidth = 4;
 
-  ctx.fillStyle = "#29b6f6";
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY - lensHalfH);
-  ctx.lineTo(centerX - 10, centerY - lensHalfH + 20);
-  ctx.lineTo(centerX + 10, centerY - lensHalfH + 20);
-  ctx.fill();
+// thân thấu kính
+ctx.beginPath();
+ctx.moveTo(centerX, centerY - lensHalfH);
+ctx.lineTo(centerX, centerY + lensHalfH);
+ctx.stroke();
 
-  ctx.beginPath();
-  ctx.moveTo(centerX, centerY + lensHalfH);
-  ctx.lineTo(centerX - 10, centerY + lensHalfH - 20);
-  ctx.lineTo(centerX + 10, centerY + lensHalfH - 20);
-  ctx.fill();
+// mũi tên theo loại thấu kính
+ctx.fillStyle = "#29b6f6";
+
+// HỘI TỤ → mũi tên CHỈA RA
+if (type === "converging") {
+    // trên
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY - lensHalfH);
+    ctx.lineTo(centerX - 12, centerY - lensHalfH + 20);
+    ctx.lineTo(centerX + 12, centerY - lensHalfH + 20);
+    ctx.fill();
+
+    // dưới
+    ctx.beginPath();
+    ctx.moveTo(centerX, centerY + lensHalfH);
+    ctx.lineTo(centerX - 12, centerY + lensHalfH - 20);
+    ctx.lineTo(centerX + 12, centerY + lensHalfH - 20);
+    ctx.fill();
+}
+// PHÂN KỲ → mũi tên CHỈA VÀO
+// PHÂN KỲ – MŨI TÊN CHĨA VÀO
+else {
+    // trên (chĩa xuống)
+    ctx.beginPath();
+    ctx.moveTo(centerX - 12, centerY - lensHalfH - 20);
+    ctx.lineTo(centerX, centerY - lensHalfH);
+    ctx.lineTo(centerX + 12, centerY - lensHalfH - 20);
+    ctx.fill();
+
+    // dưới (chĩa lên)
+    ctx.beginPath();
+    ctx.moveTo(centerX - 12, centerY + lensHalfH + 20);
+    ctx.lineTo(centerX, centerY + lensHalfH);
+    ctx.lineTo(centerX + 12, centerY + lensHalfH + 20);
+    ctx.fill();
+}
+
+
 
   // focal points
   const f_px = Math.abs(f) * SCALE;
