@@ -101,16 +101,19 @@ button:hover {
     width: 100%;
     display: block;
 
-    /* Nền giữ nguyên */
-    background: linear-gradient(#fff, #f3f6ff);
+    /* Nền bảng phấn xanh */
+    background: linear-gradient(#2f4f39, #3b5f47);
 
-    /* Viền đỏ Noel */
-    border: 12px solid #c62828;
+    /* Không viền */
+    border: none;
+
+    /* Bo nhẹ cho đẹp (tùy chọn) */
     border-radius: 14px;
 
-    /* Tăng độ nổi */
-    box-shadow: 0 0 15px rgba(198, 40, 40, 0.4);
+    /* Hiệu ứng bảng phấn mờ nhẹ */
+    box-shadow: inset 0 0 25px rgba(0,0,0,0.4);
 }
+
 
 /* ============================
    LEGEND
