@@ -51,6 +51,47 @@ function dot(x, y, color = "#fff") {
   ctx.arc(x, y, 4, 0, Math.PI * 2);
   ctx.fill();
 }
+// place this right after drawArrow(...)
+function arrowRay(x1, y1, x2, y2, color = "#ffffff", dash = false) {
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+
+    if (dash) ctx.setLineDash([6, 6]);
+
+    // VẼ TIA
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+
+    if (dash) ctx.setLineDash([]);
+
+    // --- VẼ MŨI TÊN Ở GIỮA TIA ---
+    const mx = (x1 + x2) / 2;
+    const my = (y1 + y2) / 2;
+
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+    const size = 12;
+
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.moveTo(mx, my);
+    ctx.lineTo(
+        mx - size * Math.cos(angle - Math.PI / 6),
+        my - size * Math.sin(angle - Math.PI / 6)
+    );
+    ctx.lineTo(
+        mx - size * Math.cos(angle + Math.PI / 6),
+        my - size * Math.sin(angle + Math.PI / 6)
+    );
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.restore();
+}
+
+
 function drawArrow(x1, y1, x2, y2, color = "#ffffff") {
     const headlen = 12;
     const angle = Math.atan2(y2 - y1, x2 - x1);
@@ -260,10 +301,8 @@ ctx.strokeStyle = "#ffffff";
   // ray 1
 ctx.strokeStyle = "#ffffff";
   ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.moveTo(objTop.x, objTop.y);
-  ctx.lineTo(hitPoint.x, hitPoint.y);
-  ctx.stroke();
+  arrowRay(objTop.x, objTop.y, hitPoint.x, hitPoint.y);
+
 
   if (type === "converging") {
     if (isReal && isFinite(di_cm)) {
@@ -271,10 +310,8 @@ ctx.strokeStyle = "#ffffff";
       let slopeR = (imageTopY - hitPoint.y) / (imageX - hitPoint.x || 1e-6);
       const extYR = hitPoint.y + slopeR * (extXR - hitPoint.x);
 
-      ctx.beginPath();
-      ctx.moveTo(hitPoint.x, hitPoint.y);
-      ctx.lineTo(extXR, extYR);
-      ctx.stroke();
+      arrowRay(hitPoint.x, hitPoint.y, extXR, extYR);
+
     } else {
       const dx = focalRight.x - hitPoint.x;
       const dy = focalRight.y - hitPoint.y;
@@ -282,10 +319,8 @@ ctx.strokeStyle = "#ffffff";
       const slopeR = dy / (dx || 1e-6);
       const extYR = hitPoint.y + slopeR * (extXR - hitPoint.x);
 
-      ctx.beginPath();
-      ctx.moveTo(hitPoint.x, hitPoint.y);
-      ctx.lineTo(extXR, extYR);
-      ctx.stroke();
+      arrowRay(hitPoint.x, hitPoint.y, extXR, extYR);
+
 
       if (isFinite(di_cm)) {
         ctx.setLineDash([6, 6]);
@@ -306,11 +341,8 @@ ctx.strokeStyle = "#ffffff";
     const clampX = canvas.width - 10;
     const s = (clampX - hitPoint.x) / (ux || 1e-6);
     const clampY = hitPoint.y + s * uy;
+    arrowRay(hitPoint.x, hitPoint.y, clampX, clampY);
 
-    ctx.beginPath();
-    ctx.moveTo(hitPoint.x, hitPoint.y);
-    ctx.lineTo(clampX, clampY);
-    ctx.stroke();
 
     ctx.setLineDash([6, 6]);
     ctx.beginPath();
@@ -321,14 +353,15 @@ ctx.strokeStyle = "#ffffff";
   }
 
   // ray 2
-  ctx.beginPath();
-  ctx.moveTo(objTop.x, objTop.y);
-  const dirX = lensCenter.x - objTop.x;
-  const dirY = lensCenter.y - objTop.y;
-  const param = (canvas.width - 10 - objTop.x) / (dirX || 1e-6);
-  const extY = objTop.y + param * dirY;
-  ctx.lineTo(canvas.width - 10, extY);
-  ctx.stroke();
+// ray 2 (thay nguyên block cũ bằng block này)
+const dirX = lensCenter.x - objTop.x;
+const dirY = lensCenter.y - objTop.y;
+const param = (canvas.width - 10 - objTop.x) / (dirX || 1e-6);
+const extY = objTop.y + param * dirY;
+
+// vẽ tia thứ hai (có mũi tên ở cuối)
+arrowRay(objTop.x, objTop.y, canvas.width - 10, extY, "#ffffff", false);
+
 
   if (!isReal && isFinite(di_cm)) {
     const back_dx = -dirX;
