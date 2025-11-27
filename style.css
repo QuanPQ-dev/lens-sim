@@ -101,17 +101,17 @@ button:hover {
     width: 100%;
     display: block;
 
-    /* nền trắng, không gradient */
-    background: #ffffff !important;
+    /* Xanh bảng phấn */
+    background: #2e5f3e;
 
-    /* remove any border/frame */
-    border: none !important;
-    border-image: none !important;
-    border-radius: 0 !important;
+    /* Cho cảm giác bảng thật */
+    background-image:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 60%),
+        radial-gradient(circle at 70% 70%, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0) 65%);
 
-    /* remove any shadow */
-    box-shadow: none !important;
+    border: none;
 }
+
 
 /* ============================
    LEGEND

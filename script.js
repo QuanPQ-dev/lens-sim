@@ -13,6 +13,13 @@ const doVal = document.getElementById("doVal");
 const hVal = document.getElementById("hVal");
 const resetBtn = document.getElementById("resetBtn");
 const scaleVal = document.getElementById("scaleVal");
+// thêm thanh hiển thị d' và h'
+const dPrimeSlider = document.getElementById("dPrimeSlider");
+const dPrimeVal = document.getElementById("dPrimeVal");
+
+const hPrimeSlider = document.getElementById("hPrimeSlider");
+const hPrimeVal = document.getElementById("hPrimeVal");
+
 
 // scale: 1 cm => px
 let SCALE = 5;
@@ -38,7 +45,7 @@ function computeDi(f, do_cm) {
   return 1 / denom;
 }
 
-function dot(x, y, color = "#000") {
+function dot(x, y, color = "#fff") {
   ctx.fillStyle = color;
   ctx.beginPath();
   ctx.arc(x, y, 4, 0, Math.PI * 2);
@@ -89,7 +96,7 @@ function draw() {
   const centerY = canvas.height * 0.5;
 
   // axis
-  ctx.strokeStyle = "#222";
+ctx.strokeStyle = "#ffffff";
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(0, centerY);
@@ -97,8 +104,8 @@ function draw() {
   ctx.stroke();
 
   // Δ reference mark
-  ctx.fillStyle = "#000";
-  ctx.font = "20px Mountains of Christmas";
+  ctx.fillStyle = "#fff";
+  ctx.font = "32px Mountains of Christmas";
   ctx.fillText("Δ", centerX - 500, centerY - 10);
 
   // lens
@@ -181,7 +188,7 @@ else {
   const objX = centerX - do_cm * SCALE;
   const objTopY = centerY - h_cm * SCALE;
 
-  ctx.strokeStyle = "#000";
+ctx.strokeStyle = "#ffffff";
   ctx.lineWidth = 3;
   ctx.beginPath();
   ctx.moveTo(objX, centerY);
@@ -200,9 +207,26 @@ else {
   const hi_cm = isFinite(di_cm) ? (-di_cm / do_cm) * h_cm : 0;
   const imageTopY = centerY - hi_cm * SCALE;
   const isReal = isFinite(di_cm) && di_cm > 0;
+  // ----------------------------------------------------
+// CẬP NHẬT THANH d' VÀ h' (DO MÁY TÍNH TỰ ĐỘNG)
+// ----------------------------------------------------
+if (isFinite(di_cm)) {
+    dPrimeSlider.value = di_cm;
+    dPrimeVal.textContent = di_cm.toFixed(1) + " cm";
+
+    hPrimeSlider.value = hi_cm;
+    hPrimeVal.textContent = hi_cm.toFixed(1) + " cm";
+} else {
+    dPrimeSlider.value = 0;
+    dPrimeVal.textContent = "∞";
+
+    hPrimeSlider.value = 0;
+    hPrimeVal.textContent = "0 cm";
+}
+
 
   ctx.lineWidth = 3;
-  ctx.strokeStyle = "#d32f2f";
+ctx.strokeStyle = "#ffffff";
   ctx.setLineDash(isReal ? [] : [6, 6]);
   ctx.beginPath();
   ctx.moveTo(imageX, centerY);
@@ -232,7 +256,7 @@ else {
   const lensCenter = { x: lensX, y: centerY };
 
   // ray 1
-  ctx.strokeStyle = "#d32f2f";
+ctx.strokeStyle = "#ffffff";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(objTop.x, objTop.y);
@@ -322,7 +346,7 @@ else {
      LABELS — VẼ SAU CÙNG ĐỂ ĐÈ LÊN TIA SÁNG
   ===================================================== */
 
-  ctx.fillStyle = "#000";
+  ctx.fillStyle = "#ffe680";
   ctx.font = "20px Mountains of Christmas";
 
   ctx.fillText("A", objX - 14, centerY + 16);
@@ -333,7 +357,19 @@ else {
   ctx.fillText("F", centerX - f_px - 8, centerY - 10);
   ctx.fillText("F'", centerX + f_px - 6, centerY - 10);
   ctx.fillText("O", centerX + 8, centerY + 18);
+  // ⭐ VẼ TIÊU ĐỀ GIÁNG SINH
+  drawChristmasText(ctx, canvas.width);
 }
+function drawChristmasText(ctx, width) {
+    ctx.save();
+    ctx.font = "48px Mountains of Christmas";
+    ctx.fillStyle = "white";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top";
+    ctx.fillText("Merry Christmas", width / 2, 20);
+    ctx.restore();
+}
+
 
 // smoothed draw
 function scheduleDraw() {
@@ -342,6 +378,7 @@ function scheduleDraw() {
 }
 
 [fEl, doEl, hEl, lensTypeEl].forEach(el => el.addEventListener("input", scheduleDraw));
+
 
 resetBtn.addEventListener("click", () => {
   fEl.value = 10;
