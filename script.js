@@ -363,9 +363,11 @@ ctx.strokeStyle = "#ffffff";
 function drawChristmasText(ctx, width) {
     ctx.save();
     ctx.font = "48px Mountains of Christmas";
-    ctx.fillStyle = "white";
+    ctx.fillStyle = "#ff3b3b";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
+    ctx.shadowColor = "rgba(0,0,0,0.5)";
+    ctx.shadowBlur = 6;
     ctx.fillText("Merry Christmas", width / 2, 20);
     ctx.restore();
 }
