@@ -114,40 +114,58 @@ ctx.lineTo(centerX, centerY + lensHalfH);
 ctx.stroke();
 
 // mũi tên theo loại thấu kính
-ctx.fillStyle = "#29b6f6";
+ctx.strokeStyle = "#29b6f6";
+ctx.lineWidth = 3;
 
-// HỘI TỤ → mũi tên CHỈA RA
+// ---- THẤU KÍNH HỘI TỤ (mũi TỎA RA) ----
+// ---- THẤU KÍNH HỘI TỤ (mũi TỎA RA) ----
 if (type === "converging") {
-    // trên
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY - lensHalfH);
-    ctx.lineTo(centerX - 12, centerY - lensHalfH + 20);
-    ctx.lineTo(centerX + 12, centerY - lensHalfH + 20);
-    ctx.fill();
 
-    // dưới
-    ctx.beginPath();
-    ctx.moveTo(centerX, centerY + lensHalfH);
-    ctx.lineTo(centerX - 12, centerY + lensHalfH - 20);
-    ctx.lineTo(centerX + 12, centerY + lensHalfH - 20);
-    ctx.fill();
+  ctx.strokeStyle = "#29b6f6";
+  ctx.lineWidth = 2;
+
+  // ĐỈNH TRÊN – V mở ra, mũi hướng RA ngoài
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY - lensHalfH);         // đỉnh chạm thân
+  ctx.lineTo(centerX - 12, centerY - lensHalfH + 20);
+  ctx.moveTo(centerX, centerY - lensHalfH);
+  ctx.lineTo(centerX + 12, centerY - lensHalfH + 20);
+  ctx.stroke();
+
+  // ĐỈNH DƯỚI – V mở ra, mũi hướng RA ngoài
+  ctx.beginPath();
+  ctx.moveTo(centerX, centerY + lensHalfH);         // đỉnh chạm thân
+  ctx.lineTo(centerX - 12, centerY + lensHalfH - 20);
+  ctx.moveTo(centerX, centerY + lensHalfH);
+  ctx.lineTo(centerX + 12, centerY + lensHalfH - 20);
+  ctx.stroke();
 }
-// PHÂN KỲ → mũi tên CHỈA VÀO
-// PHÂN KỲ – MŨI TÊN CHĨA VÀO
+
+
+// ---- THẤU KÍNH PHÂN KỲ (mũi CHỤM VÀO) ----
 else {
-    // trên (chĩa xuống)
+
+    // Trên: \/ (chụm vào)
     ctx.beginPath();
     ctx.moveTo(centerX - 12, centerY - lensHalfH - 20);
     ctx.lineTo(centerX, centerY - lensHalfH);
-    ctx.lineTo(centerX + 12, centerY - lensHalfH - 20);
-    ctx.fill();
+    ctx.stroke();
 
-    // dưới (chĩa lên)
+    ctx.beginPath();
+    ctx.moveTo(centerX + 12, centerY - lensHalfH - 20);
+    ctx.lineTo(centerX, centerY - lensHalfH);
+    ctx.stroke();
+
+    // Dưới: /\ (chụm vào)
     ctx.beginPath();
     ctx.moveTo(centerX - 12, centerY + lensHalfH + 20);
     ctx.lineTo(centerX, centerY + lensHalfH);
-    ctx.lineTo(centerX + 12, centerY + lensHalfH + 20);
-    ctx.fill();
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.moveTo(centerX + 12, centerY + lensHalfH + 20);
+    ctx.lineTo(centerX, centerY + lensHalfH);
+    ctx.stroke();
 }
 
 
