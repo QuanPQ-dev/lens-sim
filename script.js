@@ -131,6 +131,7 @@ function draw() {
   const do_cm = Number(doEl.value);
   const h_cm = Number(hEl.value);
 
+
   fVal.textContent = fInput;
   doVal.textContent = do_cm;
   hVal.textContent = h_cm;
@@ -139,7 +140,7 @@ function draw() {
   const centerY = canvas.height * 0.5;
 
   // axis
-ctx.strokeStyle = "#ffffff";
+ctx.strokeStyle = "#ffffff" ;
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.moveTo(0, centerY);
