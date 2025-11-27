@@ -81,6 +81,8 @@ function drawArrow(x1, y1, x2, y2, color = "#ffffff") {
 
 function draw() {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  drawChristmasBorder(ctx, canvas.width, canvas.height);
+
 
   const type = lensTypeEl.value;
   const fInput = Number(fEl.value);
@@ -362,15 +364,95 @@ ctx.strokeStyle = "#ffffff";
 }
 function drawChristmasText(ctx, width) {
     ctx.save();
-    ctx.font = "48px Mountains of Christmas";
-    ctx.fillStyle = "#ff3b3b";
+    ctx.font = "60px Mountains of Christmas";
     ctx.textAlign = "center";
     ctx.textBaseline = "top";
-    ctx.shadowColor = "rgba(0,0,0,0.5)";
-    ctx.shadowBlur = 6;
-    ctx.fillText("Merry Christmas", width / 2, 20);
+
+    // Neon glow cực mạnh
+    ctx.shadowColor = "rgba(255,255,180,1)";
+    ctx.shadowBlur = 40;
+
+    // Gradient vàng neon siêu sáng
+    const grad = ctx.createLinearGradient(0, 0, 0, 80);
+    grad.addColorStop(0, "#FFFFFF");   // đỉnh sáng trắng
+    grad.addColorStop(0.2, "#FFF89C"); // vàng sáng
+    grad.addColorStop(0.3, "#FFFF66"); // vàng neon sáng gắt
+    grad.addColorStop(0.6, "#FFFF33"); // vàng siêu sáng
+    grad.addColorStop(1, "#FFE600");   // vàng chanh rực
+
+
+    ctx.fillStyle = grad;
+
+    ctx.fillText("Merry Christmas", width / 2, 630);
+
     ctx.restore();
 }
+
+
+function drawChristmasBorder(ctx, W, H) {
+    ctx.save();
+
+    // ---- CÀNH THÔNG MÀU XANH (BRUSH) ----
+    function drawBranch(x, y, scale = 1, rotation = 0) {
+        ctx.save();
+        ctx.translate(x, y);
+        ctx.scale(scale, scale);
+        ctx.rotate(rotation);
+
+        // Vẽ 1 nhánh lá thông (hình răng cưa)
+        ctx.strokeStyle = "#0f8c28";
+        ctx.lineWidth = 4;
+
+        for (let i = 0; i < 8; i++) {
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(40, (i - 4) * 6);
+            ctx.stroke();
+        }
+
+        ctx.restore();
+    }
+
+    // ---- QUẢ CẦU ĐỎ ----
+    function drawBall(x, y, r = 14) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fillStyle = "#ff2b2b";
+        ctx.shadowColor = "rgba(255,0,0,0.6)";
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.restore();
+    }
+
+    // ====== TRÊN ======
+    for (let x = 0; x < W; x += 60) {
+        drawBranch(x, 0, 1.2, Math.random() * 0.4 - 0.2);
+    }
+
+    // Châu đỏ
+    for (let x = 40; x < W; x += 120) {
+        drawBall(x, 45, 16);
+    }
+
+    // ====== DƯỚI ======
+    for (let x = 0; x < W; x += 60) {
+        drawBranch(x, H, 1.1, Math.PI + (Math.random() * 0.4 - 0.2));
+    }
+
+    // ====== TRÁI ======
+    for (let y = 0; y < H; y += 60) {
+        drawBranch(0, y, 1.1, Math.PI / 2 + (Math.random() * 0.4 - 0.2));
+    }
+
+    // ====== PHẢI ======
+    for (let y = 0; y < H; y += 60) {
+        drawBranch(W, y, 1.1, -Math.PI / 2 + (Math.random() * 0.4 - 0.2));
+    }
+
+    ctx.restore();
+}
+
 
 
 // smoothed draw
